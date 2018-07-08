@@ -1,13 +1,79 @@
 class vPush {
   constructor(appId) {
     this.APP_ID = appId;
-    this.API = 'https://vpush.safedog.cc/add/formId';
+    this.HOST = 'https://vpush.safedog.cc';
+    this.ADD_API = this.HOST + '/add/formId';
     this.TAG = [];
     this.ALIAS = '';
   }
 
   // 兼容vpush-sdk-img
   init (page) {}
+
+  /**
+   * 获取微信用户凭证
+   */
+  getCode (callback) {
+    wx.login({
+      success: ret => {
+        callback(ret.code)
+      }
+    })
+  }
+
+  /**
+   * post数据
+   */
+  post (url, data, callback) {
+    wx.request({
+      url,
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      data: JSON.stringify(data),
+      success: callback,
+      fail: callback
+    })
+  }
+
+  // 检查是否已经开启推送
+  isOpenPush (callback) {
+    this.getCode(code => {
+      this.post(this.HOST + '/push/' + this.APP_ID + '/status', { code }, ret => {
+        if (ret.data.code === 1) return callback(ret.data.open);
+        callback(false, ret.data.message);
+      })
+    })
+  }
+
+  /**
+   * 开启推送
+   */
+  openPush (callback) {
+    this.getCode(code => {
+      this.post(this.HOST + '/push/' + this.APP_ID + '/open', {
+        code
+      }, ret => {
+        if (ret.data.code === 1) return callback(true);
+        callback(false, ret.data.message);
+      })
+    })
+  }
+
+  /**
+   * 关闭推送
+   */
+  closePush (callback) {
+    this.getCode(code => {
+      this.post(this.HOST + '/push/' + this.APP_ID + '/close', {
+        code
+      }, ret => {
+        if (ret.data.code === 1) return callback(true);
+        callback(false, ret.data.message);
+      })
+    })
+  }
 
   /**
    * 设置短标签
@@ -41,35 +107,21 @@ class vPush {
       console.log('[DEBUG FORMID]');
       return callback();
     }
-    wx.login({
-      success: ret => {
-        var { code } = ret;
-        var info = wx.getSystemInfoSync();
-        wx.request({
-          url: this.API,
-          method: 'POST',
-          header: {
-            'content-type': 'application/json'
-          },
-          data: JSON.stringify({
-            appId: this.APP_ID,
-            code,
-            formId,
-            sdk: info.SDKVersion,
-            language: info.language,
-            model: info.model,
-            platform: info.platform,
-            system: info.system,
-            version: info.version,
-            // alias && tags
-            alias: this.ALIAS,
-            tags: this.TAG
-          }),
-          success: callback,
-          fail: callback
-        });
-      }
-    });
+    var info = wx.getSystemInfoSync();
+    this.getCode(code => this.post(this.ADD_API, {
+      code,
+      appId: this.APP_ID,
+      formId,
+      sdk: info.SDKVersion,
+      language: info.language,
+      model: info.model,
+      platform: info.platform,
+      system: info.system,
+      version: info.version,
+      // alias && tags
+      alias: this.ALIAS,
+      tags: this.TAG
+    }, callback));
   }
 }
 

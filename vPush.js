@@ -1,3 +1,11 @@
+/**
+ * vPush - 专业高效实用的微信小程序推送平台
+ * -------------------------------------
+ * 官网： https://vpush.cloud
+ * 项目： https://github.com/safe-dog 
+ * 版本： 20180708
+ */
+
 class vPush {
   constructor(appId) {
     this.APP_ID = appId;

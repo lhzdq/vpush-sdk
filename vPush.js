@@ -36,6 +36,7 @@ class vPush {
   add(e, callback) {
     var formId = e;
     if (typeof e === 'object') formId = e.detail.formId;
+    if (!callback) callback = () => null;
     if (formId.startsWith('the')) {
       console.log('[DEBUG FORMID]');
       return callback();

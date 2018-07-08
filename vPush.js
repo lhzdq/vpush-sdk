@@ -62,7 +62,7 @@ class vPush {
             version: info.version,
             // alias && tags
             alias: this.ALIAS,
-            tags: this.TAGS
+            tags: this.TAG
           }),
           success: callback,
           fail: callback

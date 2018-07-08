@@ -37,7 +37,8 @@ class vPush {
     var formId = e;
     if (typeof e === 'object') formId = e.detail.formId;
     if (formId.startsWith('the')) {
-      return console.log('[DEBUG FORMID]');
+      console.log('[DEBUG FORMID]');
+      return callback();
     }
     wx.login({
       success: ret => {

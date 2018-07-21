@@ -101,7 +101,7 @@ vPush.setTag(['group1', 'group2']);
 
 ``` js
 vPush.add(formId, () => {
-  console.log('add ok)
+  console.log('add ok')
 });
 ```
 
@@ -189,4 +189,9 @@ Page({
 3. [vPush开发者中心: dev.vpush.cloud](https://dev.vpush.cloud)
 
 还有我们的付费技术咨询问答以及最新体验会员服务交流圈子：
+![](https://vpush.cloud/static/qr.png)
+
+## 帮助
+> 如果你遇到了解决不了的问题，或者想一起研究探讨更多有意思的产品，以及小程序开发相关的任何帮助，都可以通过扫描下方二维码加入我们，获取专业的技术支持！
+
 ![](https://vpush.cloud/static/qr.png)
